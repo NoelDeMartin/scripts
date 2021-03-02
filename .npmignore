@@ -1,0 +1,11 @@
+scripts/
+tmp/
+
+.eslintrc.js
+*.tgz
+api-extractor.json
+noeldemartin.config.js
+rollup.config.js
+tsconfig.json
+
+!config/rollup.config.js
