@@ -9,8 +9,13 @@ fi
 set -e
 
 # test code
-npm run lint
-npm run test
+if [[ -f '.eslintrc.js' ]]; then
+    npm run lint
+fi
+
+if [[ -f 'jest.config.js' ]]; then
+    npm run test
+fi
 
 # update version
 hash=`git rev-parse HEAD`
