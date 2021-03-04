@@ -20,8 +20,11 @@ export async function apiExtractorBuildTypes(options: ApiExtractorBuildTypesOpti
     const config = await readProjectConfig(options.config);
     const output = options.output ?? config.output.types;
 
-    if (!output)
-        throw new Error('Output types configuration missing');
+    if (!output) {
+        console.log('Output types configuration is missing');
+
+        process.exit(1);
+    }
 
     clearTmp();
 
@@ -48,7 +51,7 @@ async function generateDeclarations(
 
     const aliases = prepareAliases(options.alias ?? getDefaultAliases());
     const bundle = await rollup.rollup({
-        external: options.external ?? config.external,
+        external: options.external ?? config.override.types?.external ?? config.external,
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
             typescript({

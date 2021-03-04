@@ -1,8 +1,10 @@
 import { babel } from '@rollup/plugin-babel';
-import type { OutputOptions, RollupOptions } from 'rollup';
 import { terser } from 'rollup-plugin-terser';
-import resolve from '@rollup/plugin-commonjs';
+import resolveCommonJS from '@rollup/plugin-commonjs';
+import resolveNode from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import type { OutputOptions, RollupOptions } from 'rollup';
+import type { Options as TerserOptions } from 'rollup-plugin-terser';
 
 import { readProjectConfig } from './common';
 
@@ -10,7 +12,9 @@ export type RollupBuildOptions = Partial<{
     config: string;
     input: string;
     external: (string | RegExp)[];
+    globals: Record<string, string>;
     polyfills: false | 'bundled' | 'runtime';
+    terser: TerserOptions | false;
 }>;
 
 export function rollupBuild(options?: RollupBuildOptions): Promise<RollupOptions[]>;
@@ -29,19 +33,22 @@ export async function rollupBuild(
 }
 
 async function getBuilds(options: RollupBuildOptions): Promise<[OutputOptions, RollupBuildOptions][]> {
-    const { name, output } = await readProjectConfig(options.config);
+    const config = await readProjectConfig(options.config);
 
     const builds: (undefined | '' | [OutputOptions, RollupBuildOptions])[] = [
-        output.module && [{ file: output.module, format: 'esm' }, options],
-        output.main && [{ file: output.main, format: 'cjs' }, {
+        config.output.module && [{ file: config.output.module, format: 'esm' }, {
             ...options,
-            polyfills: options.polyfills ?? 'runtime',
+            ...config.override.module ?? {},
         }],
-        output.browser && [{ file: output.browser, format: 'umd', name }, {
+        config.output.main && [{ file: config.output.main, format: 'cjs' }, {
             ...options,
-
-            // TODO not bundling :/
-            polyfills: options.polyfills ?? 'bundled',
+            ...config.override.main ?? {},
+            polyfills: options.polyfills ?? config.override.main?.polyfills ?? config.polyfills ?? 'runtime',
+        }],
+        config.output.browser && [{ file: config.output.browser, format: 'umd', name: config.name }, {
+            ...options,
+            ...config.override.browser ?? {},
+            polyfills: options.polyfills ?? config.override.browser?.polyfills ?? config.polyfills ?? 'bundled',
         }],
     ];
 
@@ -51,11 +58,14 @@ async function getBuilds(options: RollupBuildOptions): Promise<[OutputOptions, R
 async function getRollupOptions(output: OutputOptions, options: RollupBuildOptions): Promise<RollupOptions> {
     const config = await readProjectConfig(options.config);
 
-    const includePolyfills = !!options.polyfills;
+    const includePolyfills = !!(options.polyfills ?? config.polyfills);
     const bundlePolyfills = options.polyfills === 'bundled';
+    const terserOptions = options.terser ?? config.terser;
     const plugins = [];
 
     plugins.push(typescript());
+    plugins.push(resolveNode());
+    plugins.push(resolveCommonJS());
 
     if (includePolyfills)
         plugins.push(babel({
@@ -93,20 +103,19 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
             ],
         }));
 
-    if (bundlePolyfills)
-        plugins.push(resolve());
-
-    plugins.push(terser());
+    if (terserOptions)
+        plugins.push(terser(terserOptions));
 
     return {
         input: options.input ?? 'src/main.ts',
         output: {
             sourcemap: true,
+            exports: 'named',
+            globals: options.globals ?? config.globals ?? (name => name),
             ...output,
         },
         external: [
-            ...config.external,
-            ...(options.external ?? []),
+            ...(options.external ?? config.external ?? []),
             ...(bundlePolyfills ? [] : [
                 /^core-js\//,
                 /^@babel\/runtime\//,
