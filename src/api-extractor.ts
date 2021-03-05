@@ -66,17 +66,22 @@ async function generateDeclarations(
 
     rewriteAliasesInDirectory(projectPath('tmp'), aliases);
 
-    return rollupGeneratedDeclarations();
+    const tmpDeclarationsFile = await rollupGeneratedDeclarations();
+
+    restoreAliasesInFile(tmpDeclarationsFile, aliases);
+
+    return tmpDeclarationsFile;
 }
 
-function prepareAliases(paths: Record<string, string[]>): [RegExp, string][] {
+function prepareAliases(paths: Record<string, string[]>): [RegExp, string, string][] {
     return Object.entries(paths).map(([alias, paths]) => [
         new RegExp(alias.slice(0, -2), 'mg'),
         projectPath(`tmp/${paths[0]}`).slice(0, -2),
+        alias.slice(0, -2),
     ]);
 }
 
-function rewriteAliasesInDirectory(directoryPath: string, aliases: [RegExp, string][]): void {
+function rewriteAliasesInDirectory(directoryPath: string, aliases: [RegExp, string, string][]): void {
     const fileNames = fs.readdirSync(directoryPath);
 
     for (const fileName of fileNames) {
@@ -89,11 +94,21 @@ function rewriteAliasesInDirectory(directoryPath: string, aliases: [RegExp, stri
     }
 }
 
-function rewriteAliasesInFile(filePath: string, aliases: [RegExp, string][]): void {
+function rewriteAliasesInFile(filePath: string, aliases: [RegExp, string, string][]): void {
     let contents = fs.readFileSync(filePath).toString();
 
     for (const [alias, replacement] of aliases) {
         contents = contents.replace(alias, replacement);
+    }
+
+    fs.writeFileSync(filePath, contents);
+}
+
+function restoreAliasesInFile(filePath: string, aliases: [RegExp, string, string][]): void {
+    let contents = fs.readFileSync(filePath).toString();
+
+    for (const [, replacement, original] of aliases) {
+        contents = contents.replace(new RegExp(replacement, 'mg'), original);
     }
 
     fs.writeFileSync(filePath, contents);
