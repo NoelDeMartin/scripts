@@ -1,4 +1,5 @@
 import { babel } from '@rollup/plugin-babel';
+import { stringToSlug, stringToStudlyCase } from '@noeldemartin/utils';
 import { terser } from 'rollup-plugin-terser';
 import resolveCommonJS from '@rollup/plugin-commonjs';
 import resolveNode from '@rollup/plugin-node-resolve';
@@ -38,17 +39,17 @@ async function getBuilds(options: RollupBuildOptions): Promise<[OutputOptions, R
     const builds: (undefined | '' | [OutputOptions, RollupBuildOptions])[] = [
         config.output.module && [{ file: config.output.module, format: 'esm' }, {
             ...options,
-            ...config.override.module ?? {},
+            ...config.overrides.module ?? {},
         }],
         config.output.main && [{ file: config.output.main, format: 'cjs' }, {
             ...options,
-            ...config.override.main ?? {},
-            polyfills: options.polyfills ?? config.override.main?.polyfills ?? config.polyfills ?? 'runtime',
+            ...config.overrides.main ?? {},
+            polyfills: options.polyfills ?? config.overrides.main?.polyfills ?? config.polyfills ?? 'runtime',
         }],
         config.output.browser && [{ file: config.output.browser, format: 'umd', name: config.name }, {
             ...options,
-            ...config.override.browser ?? {},
-            polyfills: options.polyfills ?? config.override.browser?.polyfills ?? config.polyfills ?? 'bundled',
+            ...config.overrides.browser ?? {},
+            polyfills: options.polyfills ?? config.overrides.browser?.polyfills ?? config.polyfills ?? 'bundled',
         }],
     ];
 
@@ -111,7 +112,7 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
         output: {
             sourcemap: true,
             exports: 'named',
-            globals: options.globals ?? config.globals ?? (name => name),
+            globals: options.globals ?? config.globals ?? (name => stringToStudlyCase(stringToSlug(name))),
             ...output,
         },
         external: [

@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
+import { stringToSlug, stringToStudlyCase } from '@noeldemartin/utils';
 import type { Options as TerserOptions } from 'rollup-plugin-terser';
 
 export enum OutputTypes {
@@ -17,7 +18,7 @@ export type NoelDeMartinConfig = {
     terser: TerserOptions | false;
     globals?: Record<string, string>;
     polyfills?: false | 'bundled' | 'runtime';
-    override: Partial<
+    overrides: Partial<
         Record<
             OutputTypes,
             Partial<Pick<NoelDeMartinConfig, 'external' | 'terser' | 'polyfills' | 'globals'>>
@@ -26,6 +27,10 @@ export type NoelDeMartinConfig = {
 };
 
 export type NoelDeMartinConfigOutput = Partial<Record<OutputTypes, string>>;
+
+export function defineConfig(config: NoelDeMartinConfig): NoelDeMartinConfig {
+    return config;
+}
 
 export function projectPath(path: string): string {
     return resolve(process.cwd(), path);
@@ -63,22 +68,24 @@ function getDefaultConfig(): NoelDeMartinConfig {
         module,
         types,
         dependencies,
+        peerDependencies,
     } = JSON.parse(readFileSync(projectPath('package.json')).toString());
 
     return {
-        name: name.substr(0, 1).toUpperCase() + name.substr(1),
+        name: stringToStudlyCase(stringToSlug(name)),
         output: { browser, main, module, types },
         external: Object
             .keys(dependencies ?? {})
+            .concat(Object.keys(peerDependencies ?? {}))
             .filter(dependency => ['core-js', '@babel/runtime', 'regenerator-runtime'].indexOf(dependency) === -1),
         declarations: [],
         terser: {
             keep_classnames: /Error$/,
             keep_fnames: /Error$/,
         },
-        override: {
+        overrides: {
             browser: {
-                external: [],
+                external: Object.keys(peerDependencies ?? {}),
             },
         },
     };

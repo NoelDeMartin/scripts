@@ -5,6 +5,7 @@ module.exports = {
         '@rollup/plugin-commonjs',
         '@rollup/plugin-node-resolve',
         '@rollup/plugin-typescript',
+        '@noeldemartin/utils',
         'fs',
         'path',
         'rollup-plugin-terser',

@@ -51,7 +51,7 @@ async function generateDeclarations(
 
     const aliases = prepareAliases(options.alias ?? getDefaultAliases());
     const bundle = await rollup.rollup({
-        external: options.external ?? config.override.types?.external ?? config.external,
+        external: options.external ?? config.overrides.types?.external ?? config.external,
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
             typescript({
