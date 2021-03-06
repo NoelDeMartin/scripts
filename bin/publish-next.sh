@@ -26,7 +26,9 @@ sed -i "s/^  \"version\"\: \"$current_version\"/  \"version\"\: \"$new_version\"
 sed -i "s/^  \"version\"\: \"$current_version\"/  \"version\"\: \"$new_version\"/" package-lock.json
 
 # build
-npm run build
+if [[ `npm run | grep "build"` ]]; then
+    npm run build
+fi
 
 # publish
 npm publish --tag next
