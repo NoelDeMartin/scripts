@@ -41,6 +41,7 @@
     "@noeldemartin/utils": "0.0.1-next.5db6594b7867d9c7ba8b8fbe51be6ad6f84133b5",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
     "babel-plugin-transform-remove-imports": "^1.5.2",

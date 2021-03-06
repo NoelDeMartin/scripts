@@ -1,6 +1,7 @@
 import { babel } from '@rollup/plugin-babel';
 import { stringToSlug, stringToStudlyCase } from '@noeldemartin/utils';
 import { terser } from 'rollup-plugin-terser';
+import json from '@rollup/plugin-json';
 import resolveCommonJS from '@rollup/plugin-commonjs';
 import resolveNode from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
@@ -67,6 +68,7 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
     plugins.push(typescript());
     plugins.push(resolveNode());
     plugins.push(resolveCommonJS());
+    plugins.push(json());
 
     if (includePolyfills)
         plugins.push(babel({
