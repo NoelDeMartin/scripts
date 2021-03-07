@@ -38,20 +38,29 @@ async function getBuilds(options: RollupBuildOptions): Promise<[OutputOptions, R
     const config = await readProjectConfig(options.config);
 
     const builds: (undefined | '' | [OutputOptions, RollupBuildOptions])[] = [
-        config.output.module && [{ file: config.output.module, format: 'esm' }, {
-            ...options,
-            ...config.overrides.module ?? {},
-        }],
-        config.output.main && [{ file: config.output.main, format: 'cjs' }, {
-            ...options,
-            ...config.overrides.main ?? {},
-            polyfills: options.polyfills ?? config.overrides.main?.polyfills ?? config.polyfills ?? 'runtime',
-        }],
-        config.output.browser && [{ file: config.output.browser, format: 'umd', name: config.name }, {
-            ...options,
-            ...config.overrides.browser ?? {},
-            polyfills: options.polyfills ?? config.overrides.browser?.polyfills ?? config.polyfills ?? 'bundled',
-        }],
+        config.output.module && [
+            getOutputOptions(config.output.module, { format: 'esm' }),
+            {
+                ...options,
+                ...config.overrides.module ?? {},
+            },
+        ],
+        config.output.main && [
+            getOutputOptions(config.output.main, { format: 'cjs' }),
+            {
+                ...options,
+                ...config.overrides.main ?? {},
+                polyfills: options.polyfills ?? config.overrides.main?.polyfills ?? config.polyfills ?? 'runtime',
+            },
+        ],
+        config.output.browser && [
+            getOutputOptions(config.output.browser, { name: config.name, format: 'umd' }),
+            {
+                ...options,
+                ...config.overrides.browser ?? {},
+                polyfills: options.polyfills ?? config.overrides.browser?.polyfills ?? config.polyfills ?? 'bundled',
+            },
+        ],
     ];
 
     return builds.filter((build): build is [OutputOptions, RollupBuildOptions] => !!build);
@@ -126,6 +135,20 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
             ]),
         ],
         plugins,
+    };
+}
+
+function getOutputOptions(file: string, options: OutputOptions): OutputOptions {
+    if (options.format === 'umd')
+        return { file, ...options };
+
+    const [,, dir, name, suffix] = file.match(/((.*)\/)?([^.]+)\.(.*)/) as string[];
+
+    return {
+        dir,
+        entryFileNames: `${name}.${suffix}`,
+        chunkFileNames: `[name].hash.${suffix}`,
+        ...options,
     };
 }
 
