@@ -43,6 +43,7 @@ async function getBuilds(options: RollupBuildOptions): Promise<[OutputOptions, R
             {
                 ...options,
                 ...config.overrides.module ?? {},
+                polyfills: options.polyfills ?? config.overrides.module?.polyfills ?? config.polyfills ?? 'runtime',
             },
         ],
         config.output.main && [
