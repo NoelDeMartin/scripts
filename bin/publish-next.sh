@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# validate status
 if [[ `git status --short` ]]; then
     echo "Git working directory not clean"
     exit

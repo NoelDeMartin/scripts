@@ -8,6 +8,7 @@
   "bin": {
     "noeldemartin-build-javascript": "./bin/build-javascript.sh",
     "noeldemartin-build-types": "./bin/build-types.js",
+    "noeldemartin-deploy-app": "./bin/deploy-app.sh",
     "noeldemartin-publish-next": "./bin/publish-next.sh"
   },
   "scripts": {
