@@ -75,9 +75,9 @@ async function generateDeclarations(
 
 function prepareAliases(paths: Record<string, string[]>): [RegExp, string, string][] {
     return Object.entries(paths).map(([alias, paths]) => [
-        new RegExp(alias.slice(0, -2), 'mg'),
-        projectPath(`tmp/${paths[0]}`).slice(0, -2),
-        alias.slice(0, -2),
+        new RegExp(alias.slice(0, -1), 'mg'),
+        projectPath(`tmp/${paths[0]}`).slice(0, -1),
+        alias.slice(0, -1),
     ]);
 }
 
