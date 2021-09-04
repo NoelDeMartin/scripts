@@ -1,6 +1,6 @@
 {
   "name": "@noeldemartin/scripts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "My collection of reusable scripts",
   "main": "dist/noeldemartin-scripts.cjs.js",
   "module": "dist/noeldemartin-scripts.esm.js",
@@ -39,7 +39,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babel/runtime": "^7.13.8",
     "@microsoft/api-extractor": "^7.13.1",
-    "@noeldemartin/utils": "0.0.1-next.5db6594b7867d9c7ba8b8fbe51be6ad6f84133b5",
+    "@noeldemartin/utils": "^0.1.0",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -51,7 +51,7 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "devDependencies": {
-    "@noeldemartin/eslint-config-typescript": "0.0.0-next.fa3c9edeea6e1526504797ddd3097cbd1f039287",
+    "@noeldemartin/eslint-config-typescript": "^0.1.0",
     "eslint": "^7.21.0",
     "typescript": "^4.2.2"
   }
