@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [[ -f '.eslintrc.js' ]]; then
     for folder in $@
     do
