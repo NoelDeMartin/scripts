@@ -40,7 +40,7 @@ function clearTmp(): void {
     if (!fs.existsSync(projectPath('tmp')))
         return;
 
-    fs.rmdirSync(projectPath('tmp'), { recursive: true });
+    fs.rmSync(projectPath('tmp'), { recursive: true });
 }
 
 async function generateDeclarations(
