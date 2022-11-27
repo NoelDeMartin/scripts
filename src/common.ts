@@ -52,12 +52,12 @@ const configsCache: Record<string, NoelDeMartinConfig> = {};
 async function getProjectConfig(name: string): Promise<Partial<NoelDeMartinConfig>> {
     const configFilePath = projectPath(name);
 
-    if (!(configFilePath in configsCache))
-        configsCache[configFilePath] = existsSync(configFilePath)
-            ? (await import(configFilePath)).default
-            : {};
-
-    return configsCache[configFilePath];
+    return configsCache[configFilePath] = configsCache[configFilePath]
+        ?? (
+            existsSync(configFilePath)
+                ? (await import(configFilePath)).default
+                : {}
+        );
 }
 
 function getDefaultConfig(): NoelDeMartinConfig {
