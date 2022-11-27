@@ -124,7 +124,13 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
         output: {
             sourcemap: true,
             exports: 'named',
-            globals: options.globals ?? config.globals ?? (name => stringToStudlyCase(stringToSlug(name))),
+            globals: options.globals ?? config.globals ?? (name => {
+                if (name === config.name) {
+                    return config.name;
+                }
+
+                return stringToStudlyCase(stringToSlug(name));
+            }),
             ...output,
         },
         external: [
