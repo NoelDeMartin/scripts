@@ -1,10 +1,10 @@
-import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
+import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
 import { resolve } from 'path';
 import fs from 'fs';
 import rollup from 'rollup';
 import typescript from '@rollup/plugin-typescript';
 
-import { projectPath, readProjectConfig } from './common';
+import { packageJson, projectPath, readProjectConfig } from './common';
 import type { NoelDeMartinConfig } from './common';
 
 export type ApiExtractorBuildTypesOptions = Partial<{
@@ -117,15 +117,34 @@ function restoreAliasesInFile(filePath: string, aliases: [RegExp, string, string
 async function rollupGeneratedDeclarations(): Promise<string> {
     console.log('Rolling up generated declarations...');
 
-    const extractorConfig = ExtractorConfig.loadFileAndPrepare(projectPath('api-extractor.json'));
-    const { dtsRollup } = JSON.parse(fs.readFileSync(projectPath('api-extractor.json')).toString());
+    const rollupFile = projectPath('tmp/rollup.d.ts');
+    const extractorConfig = ExtractorConfig.prepare({
+        configObject: {
+            mainEntryPointFilePath: projectPath('tmp/main.d.ts'),
+            dtsRollup: {
+                enabled: true,
+                untrimmedFilePath: rollupFile,
+            },
+            messages: {
+                extractorMessageReporting: {
+                    'ae-missing-release-tag': { logLevel: ExtractorLogLevel.None },
+                },
+            },
+            compiler: {
+                tsconfigFilePath: projectPath('tsconfig.json'),
+            },
+            projectFolder: projectPath(),
+        },
+        packageJson: packageJson(),
+        packageJsonFullPath: projectPath('package.json'),
+        configObjectFullPath: undefined,
+    });
 
     Extractor.invoke(extractorConfig, {
         localBuild: process.env.NODE_ENV !== 'production',
-        showVerboseMessages: true,
     });
 
-    return projectPath(dtsRollup.untrimmedFilePath.replace('<projectFolder>/', ''));
+    return rollupFile;
 }
 
 async function appendProjectDeclarations(declarationsFilePath: string, declarations: string[]): Promise<void> {

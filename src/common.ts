@@ -32,8 +32,13 @@ export function defineConfig(config: NoelDeMartinConfig): NoelDeMartinConfig {
     return config;
 }
 
-export function projectPath(path: string): string {
+export function projectPath(path: string = ''): string {
     return resolve(process.cwd(), path);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function packageJson(): any {
+    return JSON.parse(readFileSync(projectPath('package.json')).toString());
 }
 
 export async function readProjectConfig(name: string = 'noeldemartin.config.js'): Promise<NoelDeMartinConfig> {
@@ -69,7 +74,7 @@ function getDefaultConfig(): NoelDeMartinConfig {
         types,
         dependencies,
         peerDependencies,
-    } = JSON.parse(readFileSync(projectPath('package.json')).toString());
+    } = packageJson();
 
     return {
         name: stringToStudlyCase(stringToSlug(name)),
