@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 dir=`pwd`
 
-while [ $dir != "/" ] && [ ! -d "$dir/node_modules" ]; do
+while [ $dir != "/" ] && [ ! -f "$dir/node_modules/@noeldemartin/scripts/config/rollup.config.js" ]; do
     dir=`dirname $dir`
 done
 
 if [ $dir == "/" ]; then
-    echo "node_modules folder not found."
+    echo "node_modules folder with @noeldemartin/scripts was not found."
     exit 1
 fi
 
