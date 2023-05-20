@@ -105,6 +105,7 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
                 /^core-js\//,
                 /^@babel\/runtime\//,
                 /^regenerator-runtime\//,
+                '@total-typescript/ts-reset',
             ]),
         ],
         plugins,

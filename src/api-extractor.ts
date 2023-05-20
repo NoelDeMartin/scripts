@@ -53,7 +53,10 @@ async function generateDeclarations(
     const aliases = prepareAliases(options.alias ?? getDefaultAliases());
     const vueOptions = typeof config.vue === 'object' ? config.vue : (config.vue ? {} : false);
     const bundle = await rollup.rollup({
-        external: options.external ?? config.overrides.types?.external ?? config.external,
+        external: [
+            ...options.external ?? config.overrides.types?.external ?? config.external ?? [],
+            '@total-typescript/ts-reset',
+        ],
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
             typescript({
