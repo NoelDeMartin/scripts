@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import fs from 'fs';
 import rollup from 'rollup';
 import typescript from '@rollup/plugin-typescript';
+import vue from 'rollup-plugin-vue';
 
 import { packageJson, projectPath, readProjectConfig } from './common';
 import type { NoelDeMartinConfig } from './common';
@@ -50,6 +51,7 @@ async function generateDeclarations(
     console.log('Generating declarations...');
 
     const aliases = prepareAliases(options.alias ?? getDefaultAliases());
+    const vueOptions = typeof config.vue === 'object' ? config.vue : (config.vue ? {} : false);
     const bundle = await rollup.rollup({
         external: options.external ?? config.overrides.types?.external ?? config.external,
         input: projectPath(options.input ?? 'src/main.ts'),
@@ -59,6 +61,7 @@ async function generateDeclarations(
                 declaration: true,
                 outDir: 'tmp',
             }),
+            vueOptions && vue(vueOptions),
         ],
     });
 

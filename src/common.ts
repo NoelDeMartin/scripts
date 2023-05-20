@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { stringToSlug, stringToStudlyCase } from '@noeldemartin/utils';
 import type { Options as TerserOptions } from 'rollup-plugin-terser';
+import type { Options as VueOptions } from 'rollup-plugin-vue';
 
 export enum OutputTypes {
     Browser = 'browser',
@@ -16,6 +17,7 @@ export type NoelDeMartinConfig = {
     external: (string | RegExp)[];
     declarations: [];
     terser: TerserOptions | false;
+    vue?: VueOptions | true;
     minify?: false;
     globals?: Record<string, string>;
     polyfills?: false | 'bundled' | 'runtime';

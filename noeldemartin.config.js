@@ -10,6 +10,7 @@ module.exports = {
         'fs',
         'path',
         'rollup-plugin-terser',
+        'rollup-plugin-vue',
         'rollup',
     ],
 };
