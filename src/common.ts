@@ -16,6 +16,7 @@ export type NoelDeMartinConfig = {
     external: (string | RegExp)[];
     declarations: [];
     terser: TerserOptions | false;
+    minify?: false;
     globals?: Record<string, string>;
     polyfills?: false | 'bundled' | 'runtime';
     overrides: Partial<
@@ -26,9 +27,11 @@ export type NoelDeMartinConfig = {
     >;
 };
 
+export type Config = Partial<NoelDeMartinConfig>;
+
 export type NoelDeMartinConfigOutput = Partial<Record<OutputTypes, string>>;
 
-export function defineConfig(config: NoelDeMartinConfig): NoelDeMartinConfig {
+export function defineConfig(config: Config): Config {
     return config;
 }
 

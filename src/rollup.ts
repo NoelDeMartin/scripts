@@ -72,7 +72,7 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
 
     const includePolyfills = !!(options.polyfills ?? config.polyfills);
     const bundlePolyfills = options.polyfills === 'bundled';
-    const terserOptions = options.terser ?? config.terser;
+    const terserOptions = options.terser ?? config.minify ?? config.terser;
     const plugins = [];
 
     plugins.push(typescript());
