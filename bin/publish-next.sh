@@ -24,7 +24,10 @@ current_version=`grep -Po "(?<=\"version\"\: \")\d.\d.\d(?=\")" < package.json`
 new_version="$current_version-next.$hash"
 
 sed -i "s/^  \"version\"\: \"$current_version\"/  \"version\"\: \"$new_version\"/" package.json
-sed -i "s/^  \"version\"\: \"$current_version\"/  \"version\"\: \"$new_version\"/" package-lock.json
+
+if [[ -f 'package-lock.json' ]]; then
+    sed -i "s/^  \"version\"\: \"$current_version\"/  \"version\"\: \"$new_version\"/" package-lock.json
+fi
 
 # build
 if [[ `npm run | grep "build"` ]]; then
