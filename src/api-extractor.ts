@@ -174,8 +174,13 @@ async function publishDeclarations(generatedDeclarationsPath: string, outputDecl
 function getDefaultAliases(): Record<string, string[]> {
     try {
         const { compilerOptions } = JSON.parse(fs.readFileSync(projectPath('tsconfig.json')).toString());
+        const aliases = (compilerOptions.paths ?? {}) as Record<string, string[]>;
 
-        return compilerOptions.paths ?? {};
+        return Object.entries(aliases).reduce((fixedAliases, [alias, paths]) => {
+            fixedAliases[alias] = paths.map(path => path.replace('/src', ''));
+
+            return fixedAliases;
+        }, {} as Record<string, string[]>);
     } catch (error) {
         return {};
     }
