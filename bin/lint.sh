@@ -2,6 +2,7 @@
 
 set -e
 
+# ESLint
 if [[ -f '.eslintrc.js' ]]; then
     for folder in $@
     do
@@ -10,12 +11,20 @@ if [[ -f '.eslintrc.js' ]]; then
     done
 fi
 
+# TypeScript
 if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc..."
     npx tsc --noEmit
 fi
 
-if [[ -f 'node_modules/vue-tsc/package.json' ]]; then
+# Vue
+dir=`pwd`
+
+while [ $dir != "/" ] && [ ! -f "$dir/node_modules/vue-tsc/package.json" ]; do
+    dir=`dirname $dir`
+done
+
+if [ $dir != "/" ]; then
     echo "Running vue-tsc..."
     npx vue-tsc --noEmit
 fi
