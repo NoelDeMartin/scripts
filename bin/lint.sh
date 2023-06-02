@@ -15,16 +15,22 @@ fi
 if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc..."
     npx tsc --noEmit
-fi
 
-# Vue
-dir=`pwd`
+    # Vue
+    dir=`pwd`
+    vue_files_count=`find $dir -iname *.vue | grep -v "node_modules" | wc -l`
 
-while [ $dir != "/" ] && [ ! -f "$dir/node_modules/vue-tsc/package.json" ]; do
-    dir=`dirname $dir`
-done
+    if [ $vue_files_count != 0 ]; then
 
-if [ $dir != "/" ]; then
-    echo "Running vue-tsc..."
-    npx vue-tsc --noEmit
+        while [ $dir != "/" ] && [ ! -f "$dir/node_modules/vue-tsc/package.json" ]; do
+            dir=`dirname $dir`
+        done
+
+        if [ $dir != "/" ]; then
+            echo "Running vue-tsc..."
+            npx vue-tsc --noEmit
+        fi
+
+    fi
+
 fi
