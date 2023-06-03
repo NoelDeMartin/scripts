@@ -2,7 +2,7 @@ import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-ex
 import { resolve } from 'path';
 import fs from 'fs';
 import rollup from 'rollup';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import vue from 'rollup-plugin-vue';
 
 import { packageJson, projectPath, readProjectConfig } from './common';
@@ -59,12 +59,17 @@ async function generateDeclarations(
         ],
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
-            typescript({
-                rootDir: 'src',
-                declaration: true,
-                outDir: 'tmp',
-            }),
             vueOptions && vue(vueOptions),
+            typescript({
+                tsconfig: projectPath('tsconfig.json'),
+                tsconfigOverride: {
+                    compilerOptions: {
+                        rootDir: 'src',
+                        declaration: true,
+                        outDir: 'tmp',
+                    },
+                },
+            }),
         ],
     });
 

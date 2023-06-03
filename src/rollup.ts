@@ -4,7 +4,7 @@ import { terser } from 'rollup-plugin-terser';
 import json from '@rollup/plugin-json';
 import resolveCommonJS from '@rollup/plugin-commonjs';
 import resolveNode from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import vue from 'rollup-plugin-vue';
 import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import type { Options as TerserOptions } from 'rollup-plugin-terser';
@@ -76,9 +76,9 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
     const vueOptions = typeof config.vue === 'object' ? config.vue : (config.vue ? {} : false);
     const bundlePolyfills = options.polyfills === 'bundled';
     const plugins = arrayFilter([
+        vueOptions && vue(vueOptions),
         typescript(),
         resolveNode(),
-        vueOptions && vue(vueOptions),
         resolveCommonJS(),
         json(),
         includePolyfills && babelPlugin(output, options),
