@@ -1,9 +1,9 @@
-import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
-import { resolve } from 'path';
 import fs from 'fs';
 import rollup from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import vue from 'rollup-plugin-vue';
+import { dirname, resolve } from 'path';
+import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
 
 import { packageJson, projectPath, readProjectConfig } from './common';
 import type { NoelDeMartinConfig } from './common';
@@ -32,6 +32,7 @@ export async function apiExtractorBuildTypes(options: ApiExtractorBuildTypesOpti
     const tmpDeclarationsFile = await generateDeclarations(options, config);
 
     await appendProjectDeclarations(tmpDeclarationsFile, options.declarations ?? config.declarations);
+    await appendModuleDeclarations(tmpDeclarationsFile, dirname(projectPath(options.input ?? 'src/main.ts')));
     await publishDeclarations(tmpDeclarationsFile, output);
 
     console.log('Done!');
@@ -168,6 +169,30 @@ async function appendProjectDeclarations(declarationsFilePath: string, declarati
     ];
 
     fs.writeFileSync(declarationsFilePath, projectDeclarations.join(''));
+}
+
+async function appendModuleDeclarations(declarationsFilePath: string, basePath: string): Promise<void> {
+    const fileNames = fs.readdirSync(basePath);
+
+    for (const fileName of fileNames) {
+        const filePath = resolve(basePath, fileName);
+        const fileStats = fs.lstatSync(filePath);
+
+        if (fileStats.isDirectory()) {
+            appendModuleDeclarations(declarationsFilePath, filePath);
+
+            continue;
+        }
+
+        const fileContents = fs.readFileSync(filePath).toString();
+        const moduleDeclarations = fileContents.match(/\ndeclare module (\n|.)*/gm);
+
+        if (!moduleDeclarations) {
+            continue;
+        }
+
+        fs.appendFileSync(declarationsFilePath, moduleDeclarations[0]);
+    }
 }
 
 async function publishDeclarations(generatedDeclarationsPath: string, outputDeclarationsPath: string): Promise<void> {
