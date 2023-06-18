@@ -191,8 +191,19 @@ async function appendModuleDeclarations(declarationsFilePath: string, basePath: 
             continue;
         }
 
-        fs.appendFileSync(declarationsFilePath, moduleDeclarations[0]);
+        fs.appendFileSync(declarationsFilePath, unwrapLocalModuleDeclarations(moduleDeclarations[0]));
     }
+}
+
+function unwrapLocalModuleDeclarations(moduleDeclarations: string): string {
+    let match: RegExpMatchArray | null;
+
+    // eslint-disable-next-line no-cond-assign
+    while (match = moduleDeclarations.match(/\ndeclare module '@\/[^']+' {((?:\n|.)*?)\n}/m)) {
+        moduleDeclarations = moduleDeclarations.replace(match[0], match[1] ?? '');
+    }
+
+    return moduleDeclarations;
 }
 
 async function publishDeclarations(generatedDeclarationsPath: string, outputDeclarationsPath: string): Promise<void> {
