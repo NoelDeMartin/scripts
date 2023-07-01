@@ -185,7 +185,7 @@ async function appendModuleDeclarations(declarationsFilePath: string, basePath: 
         }
 
         const fileContents = fs.readFileSync(filePath).toString();
-        const moduleDeclarations = fileContents.match(/\ndeclare module (\n|.)*/gm);
+        const moduleDeclarations = fileContents.match(/\ndeclare (module|global) (\n|.)*/gm);
 
         if (!moduleDeclarations) {
             continue;
