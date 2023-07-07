@@ -5,6 +5,7 @@ import vue from 'rollup-plugin-vue';
 import { dirname, resolve } from 'path';
 import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
 
+import html from './plugins/html';
 import { packageJson, projectPath, readProjectConfig } from './common';
 import type { NoelDeMartinConfig } from './common';
 
@@ -61,6 +62,7 @@ async function generateDeclarations(
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
             vueOptions && vue(vueOptions),
+            html(),
             typescript({
                 tsconfig: projectPath('tsconfig.json'),
                 tsconfigOverride: {
