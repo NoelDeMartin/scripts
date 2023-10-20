@@ -62,6 +62,7 @@ async function generateDeclarations(
             ...config.externalExtra ?? [],
             ...nodeBuiltins,
             '@total-typescript/ts-reset',
+            /^virtual:/,
         ],
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [

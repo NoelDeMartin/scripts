@@ -1,1 +1,7 @@
-export const nodeBuiltins = ['path', 'fs', 'os'];
+export const nodeBuiltins = [
+    'child_process',
+    'fs',
+    'os',
+    'path',
+    'readline',
+];
