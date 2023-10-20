@@ -11,6 +11,7 @@ module.exports = {
         'rollup-plugin-terser',
         'rollup-plugin-typescript2',
         'rollup-plugin-vue',
+        'rollup-plugin-icons',
         'rollup',
     ],
 };
