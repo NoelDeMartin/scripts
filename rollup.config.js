@@ -1,8 +1,6 @@
 import { babel } from '@rollup/plugin-babel';
 import typescript from 'rollup-plugin-typescript2';
 
-const { external } = require('./noeldemartin.config');
-
 export default {
     input: 'src/main.ts',
     output: [
@@ -10,10 +8,23 @@ export default {
         { file: 'node_modules/@noeldemartin/scripts/dist/noeldemartin-scripts.cjs.js', format: 'cjs' },
     ],
     external: [
-        ...external,
+        '@microsoft/api-extractor',
+        '@noeldemartin/utils',
+        '@rollup/plugin-babel',
+        '@rollup/plugin-commonjs',
+        '@rollup/plugin-json',
+        '@rollup/plugin-node-resolve',
+        'fs',
+        'path',
+        'rollup-plugin-icons',
+        'rollup-plugin-terser',
+        'rollup-plugin-typescript2',
+        'rollup-plugin-vue',
+        'rollup',
         /^@babel\/runtime\//,
         /^core-js\//,
         /^regenerator-runtime\//,
+        /^unplugin-icons\//,
     ],
     plugins: [
         typescript(),
