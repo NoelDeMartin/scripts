@@ -18,6 +18,7 @@ export type NoelDeMartinConfig = {
     declarations: [];
     terser: TerserOptions | false;
     vue?: VueOptions | true;
+    icons?: boolean;
     minify?: false;
     globals?: Record<string, string>;
     polyfills?: false | 'bundled' | 'runtime';

@@ -2,6 +2,7 @@ import fs from 'fs';
 import rollup from 'rollup';
 import typescript from 'rollup-plugin-typescript2';
 import vue from 'rollup-plugin-vue';
+import icons from 'unplugin-icons/rollup';
 import { dirname, resolve } from 'path';
 import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
 
@@ -62,6 +63,7 @@ async function generateDeclarations(
         input: projectPath(options.input ?? 'src/main.ts'),
         plugins: [
             vueOptions && vue(vueOptions),
+            config.icons && icons(),
             html(),
             typescript({
                 tsconfig: projectPath('tsconfig.json'),

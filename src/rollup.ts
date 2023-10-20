@@ -6,6 +6,7 @@ import resolveCommonJS from '@rollup/plugin-commonjs';
 import resolveNode from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import vue from 'rollup-plugin-vue';
+import icons from 'unplugin-icons/rollup';
 import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import type { Options as TerserOptions } from 'rollup-plugin-terser';
 
@@ -78,6 +79,7 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
     const bundlePolyfills = options.polyfills === 'bundled';
     const plugins = arrayFilter([
         vueOptions && vue(vueOptions),
+        config.icons && icons(),
         html(),
         typescript(),
         resolveNode(),
