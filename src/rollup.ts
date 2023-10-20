@@ -11,6 +11,7 @@ import type { OutputOptions, Plugin, RollupOptions } from 'rollup';
 import type { Options as TerserOptions } from 'rollup-plugin-terser';
 
 import html from './plugins/html';
+import { nodeBuiltins } from './node';
 import { readProjectConfig } from './common';
 
 export type RollupBuildOptions = Partial<{
@@ -105,6 +106,8 @@ async function getRollupOptions(output: OutputOptions, options: RollupBuildOptio
         },
         external: [
             ...(options.external ?? config.external ?? []),
+            ...config.externalExtra ?? [],
+            ...nodeBuiltins,
             ...(bundlePolyfills ? [] : [
                 /^core-js\//,
                 /^@babel\/runtime\//,

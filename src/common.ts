@@ -15,6 +15,7 @@ export type NoelDeMartinConfig = {
     name: string;
     output: NoelDeMartinConfigOutput;
     external: (string | RegExp)[];
+    externalExtra?: (string | RegExp)[];
     declarations: [];
     terser: TerserOptions | false;
     vue?: VueOptions | true;

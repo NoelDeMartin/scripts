@@ -7,6 +7,7 @@ import { dirname, resolve } from 'path';
 import { Extractor, ExtractorConfig, ExtractorLogLevel } from '@microsoft/api-extractor';
 
 import html from './plugins/html';
+import { nodeBuiltins } from './node';
 import { packageJson, projectPath, readProjectConfig } from './common';
 import type { NoelDeMartinConfig } from './common';
 
@@ -58,6 +59,8 @@ async function generateDeclarations(
     const bundle = await rollup.rollup({
         external: [
             ...options.external ?? config.overrides.types?.external ?? config.external ?? [],
+            ...config.externalExtra ?? [],
+            ...nodeBuiltins,
             '@total-typescript/ts-reset',
         ],
         input: projectPath(options.input ?? 'src/main.ts'),
