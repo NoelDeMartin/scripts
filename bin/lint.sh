@@ -3,7 +3,7 @@
 set -e
 
 # ESLint
-if [[ -f '.eslintrc.js' ]]; then
+if [[ -f '.eslintrc.js' ]] || [[ -n `grep "eslintConfig" package.json` ]]; then
     for folder in $@
     do
         echo "Running eslint for $folder..."

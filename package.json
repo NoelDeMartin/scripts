@@ -17,7 +17,7 @@
     "build:inception": "scripts/build-inception.sh",
     "build:js": "bin/build-javascript.sh",
     "build:types": "bin/build-types.js",
-    "lint": "bin/lint.sh",
+    "lint": "bin/lint.sh src",
     "publish-next": "bin/publish-next.sh"
   },
   "engines": {
@@ -60,5 +60,10 @@
     "@types/node": "^16.11.12",
     "eslint": "^7.21.0",
     "typescript": "^5.0.4"
+  },
+  "eslintConfig": {
+      "extends": [
+          "@noeldemartin/eslint-config-typescript"
+      ]
   }
 }
