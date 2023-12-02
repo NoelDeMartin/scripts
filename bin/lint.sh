@@ -3,11 +3,11 @@
 set -e
 
 # ESLint
-if [[ -f '.eslintrc.js' ]] || [[ -n `grep "eslintConfig" package.json` ]]; then
-    for folder in $@
+if [[ -f '.eslintrc.js' ]] || grep -q "eslintConfig" package.json; then
+    for folder in "$@"
     do
         echo "Running eslint for $folder..."
-        npx eslint $folder
+        npx eslint "$folder"
     done
 fi
 
@@ -17,16 +17,16 @@ if [[ -f 'tsconfig.json' ]]; then
     npx tsc --noEmit
 
     # Vue
-    dir=`pwd`
-    vue_files_count=`find $dir -iname *.vue | grep -v "node_modules" | wc -l`
+    dir=$(pwd)
+    vue_files_count=$(find "$dir" -iname "*.vue" | grep -vc "node_modules")
 
-    if [ $vue_files_count != 0 ]; then
+    if [ "$vue_files_count" != 0 ]; then
 
-        while [ $dir != "/" ] && [ ! -f "$dir/node_modules/vue-tsc/package.json" ]; do
-            dir=`dirname $dir`
+        while [ "$dir" != "/" ] && [ ! -f "$dir/node_modules/vue-tsc/package.json" ]; do
+            dir=$(dirname "$dir")
         done
 
-        if [ $dir != "/" ]; then
+        if [ "$dir" != "/" ]; then
             echo "Running vue-tsc..."
             npx vue-tsc --noEmit
         fi

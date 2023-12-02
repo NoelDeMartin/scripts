@@ -20,7 +20,7 @@ npm run build
 cd dist
 
 # prepare github pages
-echo $domain > CNAME
+echo "$domain" > CNAME
 touch .nojekyll
 
 # publish
