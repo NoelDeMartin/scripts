@@ -18,7 +18,7 @@ if [[ -f 'tsconfig.json' ]]; then
 
     # Vue
     dir=$(pwd)
-    vue_files_count=$(find "$dir" -iname "*.vue" | grep -vc "node_modules")
+    vue_files_count=$(find "$dir" -iname "*.vue" | grep -v "node_modules" | wc -l)
 
     if [ "$vue_files_count" != 0 ]; then
 

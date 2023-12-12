@@ -140,7 +140,9 @@ async function rollupGeneratedDeclarations(
 ): Promise<string> {
     console.log('Rolling up generated declarations...');
 
-    const mainEntryPointFilePath = (options.input ?? config.input).replace(/.ts$/, '.d.ts').replace('src/', 'tmp/');
+    const mainEntryPointFilePath = projectPath(
+        (options.input ?? config.input).replace(/.ts$/, '.d.ts').replace('src/', 'tmp/'),
+    );
     const rollupFile = projectPath('tmp/rollup.d.ts');
     const extractorConfig = ExtractorConfig.prepare({
         configObject: {
