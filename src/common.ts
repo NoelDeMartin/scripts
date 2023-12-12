@@ -13,6 +13,7 @@ export enum OutputTypes {
 
 export type NoelDeMartinConfig = {
     name: string;
+    input: string;
     output: NoelDeMartinConfigOutput;
     external: (string | RegExp)[];
     externalExtra?: (string | RegExp)[];
@@ -86,6 +87,7 @@ function getDefaultConfig(): NoelDeMartinConfig {
     return {
         name: stringToStudlyCase(stringToSlug(name)),
         output: { browser, main, module, types },
+        input: 'src/main.ts',
         external: Object
             .keys(dependencies ?? {})
             .concat(Object.keys(peerDependencies ?? {}))

@@ -35,7 +35,7 @@ export async function apiExtractorBuildTypes(options: ApiExtractorBuildTypesOpti
     const tmpDeclarationsFile = await generateDeclarations(options, config);
 
     await appendProjectDeclarations(tmpDeclarationsFile, options.declarations ?? config.declarations);
-    await appendModuleDeclarations(tmpDeclarationsFile, dirname(projectPath(options.input ?? 'src/main.ts')));
+    await appendModuleDeclarations(tmpDeclarationsFile, dirname(projectPath(options.input ?? config.input)));
     await publishDeclarations(tmpDeclarationsFile, output);
 
     console.log('Done!');
@@ -64,7 +64,7 @@ async function generateDeclarations(
             '@total-typescript/ts-reset',
             /^virtual:/,
         ],
-        input: projectPath(options.input ?? 'src/main.ts'),
+        input: projectPath(options.input ?? config.input),
         plugins: [
             vueOptions && vue(vueOptions),
             config.icons && icons(),
@@ -86,7 +86,7 @@ async function generateDeclarations(
 
     rewriteAliasesInDirectory(projectPath('tmp'), aliases);
 
-    const tmpDeclarationsFile = await rollupGeneratedDeclarations();
+    const tmpDeclarationsFile = await rollupGeneratedDeclarations(options, config);
 
     restoreAliasesInFile(tmpDeclarationsFile, aliases);
 
@@ -134,13 +134,17 @@ function restoreAliasesInFile(filePath: string, aliases: [RegExp, string, string
     fs.writeFileSync(filePath, contents);
 }
 
-async function rollupGeneratedDeclarations(): Promise<string> {
+async function rollupGeneratedDeclarations(
+    options: ApiExtractorBuildTypesOptions,
+    config: NoelDeMartinConfig,
+): Promise<string> {
     console.log('Rolling up generated declarations...');
 
+    const mainEntryPointFilePath = (options.input ?? config.input).replace(/.ts$/, '.d.ts').replace('src/', 'tmp/');
     const rollupFile = projectPath('tmp/rollup.d.ts');
     const extractorConfig = ExtractorConfig.prepare({
         configObject: {
-            mainEntryPointFilePath: projectPath('tmp/main.d.ts'),
+            mainEntryPointFilePath,
             dtsRollup: {
                 enabled: true,
                 untrimmedFilePath: rollupFile,
