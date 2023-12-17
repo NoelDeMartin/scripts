@@ -1,6 +1,6 @@
 {
   "name": "@noeldemartin/scripts",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "My collection of reusable scripts",
   "main": "dist/noeldemartin-scripts.cjs.js",
   "module": "dist/noeldemartin-scripts.esm.js",
