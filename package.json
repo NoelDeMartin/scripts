@@ -1,69 +1,31 @@
 {
-  "name": "@noeldemartin/scripts",
-  "version": "0.2.1",
-  "description": "My collection of reusable scripts",
-  "main": "dist/noeldemartin-scripts.cjs.js",
-  "module": "dist/noeldemartin-scripts.esm.js",
-  "types": "dist/noeldemartin-scripts.d.ts",
-  "bin": {
-    "noeldemartin-build-javascript": "./bin/build-javascript.sh",
-    "noeldemartin-build-types": "./bin/build-types.js",
-    "noeldemartin-deploy-app": "./bin/deploy-app.sh",
-    "noeldemartin-lint": "./bin/lint.sh",
-    "noeldemartin-publish-next": "./bin/publish-next.sh"
-  },
-  "scripts": {
-    "build": "rm dist -rf && rm node_modules/@noeldemartin/scripts -rf && npm run build:inception && npm run build:js && npm run build:types",
-    "build:inception": "scripts/build-inception.sh",
-    "build:js": "bin/build-javascript.sh",
-    "build:types": "bin/build-types.js",
-    "lint": "bin/lint.sh src",
-    "publish-next": "bin/publish-next.sh"
-  },
-  "engines": {
-    "node": ">=12.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/noeldemartin/scripts.git"
-  },
-  "author": "Noel De Martin",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/noeldemartin/scripts/issues"
-  },
-  "homepage": "https://github.com/noeldemartin/scripts",
-  "dependencies": {
-    "@babel/core": "^7.13.8",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-transform-runtime": "^7.13.8",
-    "@babel/preset-env": "^7.13.8",
-    "@babel/preset-typescript": "^7.13.0",
-    "@babel/runtime": "^7.13.8",
-    "@microsoft/api-extractor": "^7.34.4",
-    "@noeldemartin/utils": "^0.5.0",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "babel-plugin-transform-remove-imports": "^1.5.2",
-    "core-js": "^3.9.0",
-    "rollup": "^2.40.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.34.1",
-    "rollup-plugin-vue": "^6.0.0",
-    "tslib": "^2.5.0",
-    "unplugin-icons": "^0.17.1"
-  },
-  "devDependencies": {
-    "@noeldemartin/eslint-config-typescript": "^0.1.0",
-    "@types/node": "^16.11.12",
-    "eslint": "^7.21.0",
-    "typescript": "^5.0.4"
-  },
-  "eslintConfig": {
-      "extends": [
-          "@noeldemartin/eslint-config-typescript"
-      ]
-  }
+    "name": "@noeldemartin/scripts",
+    "version": "0.3.0",
+    "files": [
+        "bin"
+    ],
+    "license": "MIT",
+    "author": "Noel De Martin",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NoelDeMartin/scripts.git"
+    },
+    "bin": {
+        "noeldemartin-lint": "./bin/lint.sh",
+        "noeldemartin-publish-next": "./bin/publish-next.sh"
+    },
+    "devDependencies": {
+        "@noeldemartin/eslint-config-typescript": "^0.1.2",
+        "eslint": "^8.57.1",
+        "prettier": "^3.5.3",
+        "prettier-eslint-cli": "^8.0.1"
+    },
+    "eslintConfig": {
+        "extends": [
+            "@noeldemartin/eslint-config-typescript"
+        ]
+    },
+    "prettier": {
+        "printWidth": 120
+    }
 }
