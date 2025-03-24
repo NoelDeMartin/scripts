@@ -13,13 +13,18 @@
     "bin": {
         "noeldemartin-deploy-app": "./bin/deploy-app.sh",
         "noeldemartin-lint": "./bin/lint.sh",
-        "noeldemartin-publish-next": "./bin/publish-next.sh"
+        "noeldemartin-publish-next": "./bin/publish-next.sh",
+        "noeldemartin-verify": "./bin/verify.sh"
     },
-    "devDependencies": {
-        "@noeldemartin/eslint-config-typescript": "^0.1.2",
+    "dependencies": {
+        "@arethetypeswrong/cli": "^0.17.4",
         "eslint": "^8.57.1",
         "prettier": "^3.5.3",
-        "prettier-eslint-cli": "^8.0.1"
+        "prettier-eslint-cli": "^8.0.1",
+        "publint": "^0.3.9"
+    },
+    "devDependencies": {
+        "@noeldemartin/eslint-config-typescript": "^0.1.2"
     },
     "eslintConfig": {
         "extends": [
