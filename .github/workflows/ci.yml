@@ -12,6 +12,6 @@ jobs:
               with:
                   node-version-file: '.nvmrc'
                   registry-url: 'https://registry.npmjs.org'
-            - run: ./bin/publish-next.sh
+            - run: ./bin/publish-package.sh
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
