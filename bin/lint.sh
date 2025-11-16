@@ -2,6 +2,15 @@
 
 set -e
 
+# Prettier
+if [[ -f '.prettierrc' ]] || grep -q "prettier" package.json; then
+    for folder in "$@"
+    do
+        echo "Running prettier for $folder..."
+        npx prettier "$folder" --check
+    done
+fi
+
 # ESLint
 if [[ -f '.eslintrc.js' ]] || grep -q "eslintConfig" package.json; then
     for folder in "$@"
