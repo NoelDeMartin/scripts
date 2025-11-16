@@ -38,6 +38,8 @@ if npm run | grep -q "build"; then
     npm run build
 fi
 
+npm -v
+
 # Publish
 if [ "$PUBLISH_TAG" == "latest" ]; then
     npm publish
