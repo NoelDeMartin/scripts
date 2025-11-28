@@ -13,13 +13,19 @@ fi
 
 # OXLint
 if [[ -f '.oxlintrc.json' ]]; then
-    echo "Running oxlint for $folder..."
+    echo "Running oxlint..."
     npx oxlint --type-aware
 fi
 
 # Prettier
-if [[ -f '.prettierrc' ]] || grep -q "prettier" package.json; then
-    echo "Running prettier for $folder..."
+if grep -q "prettier-eslint-cli" package.json; then
+    for folder in "$@"
+    do
+        echo "Running prettier-eslint for $folder..."
+        npx prettier-eslint "$folder/**/*.{js,jsx,json,ts,tsx,vue,md,css,html}" --list-different
+    done
+elif [[ -f '.prettierrc' ]] || grep -q "prettier" package.json; then
+    echo "Running prettier..."
     npx prettier . --check
 fi
 
