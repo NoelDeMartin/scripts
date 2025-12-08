@@ -32,13 +32,13 @@ fi
 # TypeScript
 if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc for root..."
-    npx tsc -b --noEmit
+    npx tsc --noEmit
 
     for folder in "$@"
     do
         if [[ -f "$folder/tsconfig.json" ]]; then
             echo "Running tsc for $folder..."
-            npx tsc -b --noEmit --project "$folder"
+            npx tsc --noEmit --project "$folder"
         fi
     done
 
