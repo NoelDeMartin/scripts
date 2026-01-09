@@ -40,9 +40,9 @@ fi
 
 # Publish
 if [ "$PUBLISH_TAG" == "latest" ]; then
-    pnpm publish
+    pnpm publish --no-git-checks
 else
-    pnpm publish --tag next
+    pnpm publish --no-git-checks --tag next
 fi
 
 # Clean up
