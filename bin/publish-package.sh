@@ -34,15 +34,15 @@ if [ "$PUBLISH_TAG" != "latest" ]; then
 fi
 
 # Build
-if npm run | grep -q "build"; then
-    npm run build
+if pnpm run | grep -q "build"; then
+    pnpm build
 fi
 
 # Publish
 if [ "$PUBLISH_TAG" == "latest" ]; then
-    npm publish
+    pnpm publish
 else
-    npm publish --tag next
+    pnpm publish --tag next
 fi
 
 # Clean up

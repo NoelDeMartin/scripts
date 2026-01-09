@@ -8,7 +8,7 @@ set -e
 
 # Build
 rm -rf dist
-npm run build
+pnpm build
 
 # Navigate into the build output directory
 cd dist

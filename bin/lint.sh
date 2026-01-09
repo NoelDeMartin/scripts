@@ -7,14 +7,14 @@ if [[ -f '.eslintrc.js' ]] || grep -q "eslintConfig" package.json; then
     for folder in "$@"
     do
         echo "Running eslint for $folder..."
-        npx eslint "$folder"
+        pnpm exec eslint "$folder"
     done
 fi
 
 # OXLint
 if [[ -f '.oxlintrc.json' ]]; then
     echo "Running oxlint..."
-    npx oxlint --type-aware
+    pnpm exec oxlint --type-aware
 fi
 
 # Prettier
@@ -22,23 +22,23 @@ if grep -q "prettier-eslint-cli" package.json; then
     for folder in "$@"
     do
         echo "Running prettier-eslint for $folder..."
-        npx prettier-eslint "$folder/**/*.{js,jsx,json,ts,tsx,vue,md,css,html}" --list-different
+        pnpm exec prettier-eslint "$folder/**/*.{js,jsx,json,ts,tsx,vue,md,css,html}" --list-different
     done
 elif [[ -f '.prettierrc' ]] || grep -q "prettier" package.json; then
     echo "Running prettier..."
-    npx prettier . --check
+    pnpm exec prettier . --check
 fi
 
 # TypeScript
 if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc for root..."
-    npx tsc --noEmit
+    pnpm exec tsc --noEmit
 
     for folder in "$@"
     do
         if [[ -f "$folder/tsconfig.json" ]]; then
             echo "Running tsc for $folder..."
-            npx tsc --noEmit --project "$folder"
+            pnpm exec tsc --noEmit --project "$folder"
         fi
     done
 
@@ -54,7 +54,7 @@ if [[ -f 'tsconfig.json' ]]; then
 
         if [ "$dir" != "/" ]; then
             echo "Running vue-tsc..."
-            npx vue-tsc --noEmit
+            pnpm exec vue-tsc --noEmit
         fi
 
     fi

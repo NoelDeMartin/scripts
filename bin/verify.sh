@@ -20,6 +20,6 @@ while [ $i -le $# ]; do
 done
 
 # Run checks
-npm pack
-npx publint *.tgz
-npx attw *.tgz --profile esm-only $ATTW_ARGS
+pnpm pack
+pnpm exec publint *.tgz
+pnpm exec attw *.tgz --profile esm-only $ATTW_ARGS
