@@ -4,11 +4,8 @@ set -e
 
 # ESLint
 if [[ -f '.eslintrc.js' ]] || grep -q "eslintConfig" package.json; then
-    for folder in "$@"
-    do
-        echo "Running eslint for $folder..."
-        pnpm exec eslint "$folder"
-    done
+    echo "Running eslint..."
+    pnpm exec eslint .
 fi
 
 # OXLint
