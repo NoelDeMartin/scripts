@@ -33,16 +33,31 @@ if [ "$PUBLISH_TAG" != "latest" ]; then
     fi
 fi
 
-# Build
-if pnpm run | grep -q "build"; then
-    pnpm build
-fi
 
-# Publish
-if [ "$PUBLISH_TAG" == "latest" ]; then
-    pnpm publish --no-git-checks
+# Using VitePlus
+if command -v vp >/dev/null 2>&1; then
+    # Pack
+    vp pack
+
+    # Publish
+    if [ "$PUBLISH_TAG" == "latest" ]; then
+        npm publish --no-git-checks
+    else
+        npm publish --no-git-checks --tag next
+    fi
+# Using pnpm
 else
-    pnpm publish --no-git-checks --tag next
+    # Build
+    if pnpm run | grep -q "build"; then
+        pnpm build
+    fi
+
+    # Publish
+    if [ "$PUBLISH_TAG" == "latest" ]; then
+        pnpm publish --no-git-checks
+    else
+        pnpm publish --no-git-checks --tag next
+    fi
 fi
 
 # Clean up
