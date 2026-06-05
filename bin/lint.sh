@@ -29,7 +29,7 @@ fi
 # TypeScript
 if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc for root..."
-    pnpm exec tsc --noEmit
+    pnpm exec tsc -b --noEmit
 
     for folder in "$@"
     do
@@ -51,7 +51,7 @@ if [[ -f 'tsconfig.json' ]]; then
 
         if [ "$dir" != "/" ]; then
             echo "Running vue-tsc..."
-            pnpm exec vue-tsc --noEmit
+            pnpm exec vue-tsc -b --noEmit
         fi
 
     fi
