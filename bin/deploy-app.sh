@@ -15,7 +15,7 @@ cd dist
 
 # Prepare github pages
 if [[ -n $domain ]]; then
-    echo "$domain" > CNAME
+    echo "$domain" >CNAME
 fi
 
 touch .nojekyll
@@ -27,6 +27,6 @@ git config user.email 'github-actions[bot]@users.noreply.github.com'
 git checkout -b gh-pages
 git add -A
 git commit -m 'deploy'
-git push -f https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
+git push -f "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
 
 cd -

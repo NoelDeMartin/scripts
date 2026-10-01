@@ -3,7 +3,7 @@
 # Validate status
 if [[ $(git status --short) ]]; then
     echo "Git working directory not clean"
-    exit
+    exit 1
 fi
 
 # Abort on errors
@@ -21,7 +21,7 @@ done
 if [ "$PUBLISH_TAG" != "latest" ]; then
     hash=$(git rev-parse HEAD)
     packagespacing=$(head -n 2 package.json | tail -n 1 | grep -o -E "^\s+")
-    current_version=$(grep -Po "(?<=\"version\"\: \")\d.\d.\d(?=\")" < package.json)
+    current_version=$(grep -Po "(?<=\"version\"\: \")\d+\.\d+\.\d+(?=\")" <package.json)
     new_version="$current_version-next.$hash"
 
     sed -i "s/^$packagespacing\"version\"\: \"$current_version\"/$packagespacing\"version\"\: \"$new_version\"/" package.json
@@ -33,7 +33,6 @@ if [ "$PUBLISH_TAG" != "latest" ]; then
     fi
 fi
 
-
 # Using VitePlus
 if command -v vp >/dev/null 2>&1; then
     # Pack
@@ -41,9 +40,9 @@ if command -v vp >/dev/null 2>&1; then
 
     # Publish
     if [ "$PUBLISH_TAG" == "latest" ]; then
-        npm publish --no-git-checks
+        vp pm publish --no-git-checks
     else
-        npm publish --no-git-checks --tag next
+        vp pm publish --no-git-checks --tag next
     fi
 # Using pnpm
 else

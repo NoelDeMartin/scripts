@@ -16,8 +16,7 @@ fi
 
 # Prettier
 if grep -q "prettier-eslint-cli" package.json; then
-    for folder in "$@"
-    do
+    for folder in "$@"; do
         echo "Running prettier-eslint for $folder..."
         pnpm exec prettier-eslint "$folder/**/*.{js,jsx,json,ts,tsx,vue,md,css,html}" --list-different
     done
@@ -31,8 +30,7 @@ if [[ -f 'tsconfig.json' ]]; then
     echo "Running tsc for root..."
     pnpm exec tsc -b --noEmit
 
-    for folder in "$@"
-    do
+    for folder in "$@"; do
         if [[ -f "$folder/tsconfig.json" ]]; then
             echo "Running tsc for $folder..."
             pnpm exec tsc --noEmit --project "$folder"
@@ -41,7 +39,7 @@ if [[ -f 'tsconfig.json' ]]; then
 
     # Vue
     dir=$(pwd)
-    vue_files_count=$(find "$dir" -iname "*.vue" | grep -v "node_modules" | wc -l)
+    vue_files_count=$(find "$dir" -iname "*.vue" -not -path "*node_modules*" | wc -l)
 
     if [ "$vue_files_count" != 0 ]; then
 

@@ -2,8 +2,8 @@
     "emeraldwalk.runonsave": {
         "commands": [
             {
-                "match": ".*",
-                "cmd": "pnpm exec prettier-eslint ${file} --write"
+                "match": "\\.sh$",
+                "cmd": "shfmt -l -w \"${relativeFile}\"; shellcheck -f diff \"${relativeFile}\" | git apply --allow-empty"
             }
         ]
     }
