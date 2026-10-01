@@ -14,6 +14,6 @@ while [ $# -gt 0 ]; do
 done
 
 # Run checks
-pnpm pack
-pnpm exec publint ./*.tgz
-pnpm exec attw ./*.tgz --profile esm-only "${ATTW_ARGS[@]}"
+vp pm pack
+vp exec publint ./*.tgz
+vp exec attw ./*.tgz --profile esm-only "${ATTW_ARGS[@]}"

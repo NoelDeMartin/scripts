@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 
-# Validate status
+# Validate environment
+if ! command -v vp >/dev/null 2>&1; then
+    echo "Vite+ (vp) is required to publish packages"
+    exit 1
+fi
+
 if [[ $(git status --short) ]]; then
     echo "Git working directory not clean"
+    exit 1
+fi
+
+if ! node -e "process.exit(require('./package.json').scripts?.build ? 0 : 1)"; then
+    echo "Package has no build script (use something like \"build\": \"echo 'Nothing to build'\" if it doesn't need one)"
     exit 1
 fi
 
@@ -25,39 +35,11 @@ if [ "$PUBLISH_TAG" != "latest" ]; then
     new_version="$current_version-next.$hash"
 
     sed -i "s/^$packagespacing\"version\"\: \"$current_version\"/$packagespacing\"version\"\: \"$new_version\"/" package.json
-
-    if [[ -f 'package-lock.json' ]]; then
-        packagelockspacing=$(head -n 2 package.json | tail -n 1 | grep -o -E "^\s+")
-
-        sed -i "s/^$packagelockspacing\"version\"\: \"$current_version\"/$packagelockspacing\"version\"\: \"$new_version\"/" package-lock.json
-    fi
 fi
 
-# Using VitePlus
-if command -v vp >/dev/null 2>&1; then
-    # Pack
-    vp pack
-
-    # Publish
-    if [ "$PUBLISH_TAG" == "latest" ]; then
-        vp pm publish --no-git-checks
-    else
-        vp pm publish --no-git-checks --tag next
-    fi
-# Using pnpm
-else
-    # Build
-    if pnpm run | grep -q "build"; then
-        pnpm build
-    fi
-
-    # Publish
-    if [ "$PUBLISH_TAG" == "latest" ]; then
-        pnpm publish --no-git-checks
-    else
-        pnpm publish --no-git-checks --tag next
-    fi
-fi
+# Build & Publish
+vp run build
+vp pm publish --no-git-checks --tag "$PUBLISH_TAG"
 
 # Clean up
 git checkout .

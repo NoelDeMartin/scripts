@@ -3,19 +3,13 @@
 # Abort on errors
 set -e
 
-# Parse arguments
-if git log -1 --format=%B HEAD | grep -q "\[publish all\]"; then
-    echo "Publishing all packages..."
-    PACKAGES=$(for dir in packages/*/; do basename "$dir"; done | sort)
-else
-    echo "Publishing only modified packages..."
-    PACKAGES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep "^packages/" | cut -d/ -f2 | sort -u)
-fi
+# Find packages modified in the last commit
+PACKAGES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep "^packages/" | cut -d/ -f2 | sort -u)
 
 # Publish packages
 for package in $PACKAGES; do
     echo "Publishing $package..."
     cd "packages/$package"
-    pnpm exec noeldemartin-publish-package
+    vp exec noeldemartin-publish-package
     cd ../..
 done
