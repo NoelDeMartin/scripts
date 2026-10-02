@@ -19,5 +19,5 @@
         "noeldemartin-publish-modified-packages": "./bin/publish-modified-packages.sh",
         "noeldemartin-verify": "./bin/verify.sh"
     },
-    "packageManager": "pnpm@11.5.2"
+    "packageManager": "pnpm@12.8.1"
 }
